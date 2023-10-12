@@ -30,16 +30,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware('staff', 'root')->prefix('staff')->group(function () {
         Route::get('/dashboard', [StaffDashboard::class, 'index']);
     });
-
-    // Route::get('/root/dashboard', function () {
-    //     return view('dashboard');
-    // })->middleware(['auth', 'verified', 'root'])->name('root-dashboard');
-    // Route::get('/admin/dashboard', function () {
-    //     return view('dashboard');
-    // })->middleware(['auth', 'verified', 'admin'])->name('admin-dashboard');
-    // Route::get('/staff/dashboard', function () {
-    //     return view('dashboard');
-    // })->middleware(['auth', 'verified', 'staff'])->name('staff-dashboard');
     
 });
 
