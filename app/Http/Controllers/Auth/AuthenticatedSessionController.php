@@ -15,6 +15,12 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
+    protected $url_redirect = [
+        'root' => '/root/dashboard/',
+        'admin' => '/admin/dashboard/',
+        'staff' => '/staff/dashboard/',
+    ];
+
     public function create(): View
     {
         return view('auth.login');
@@ -29,7 +35,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $role = $this->url_redirect[Auth::user()->role];
+
+        if ($role) {
+            return redirect()->intended($role);
+        } else {
+            return $this->destroy($request);
+        }
+
     }
 
     /**
@@ -43,6 +56,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 }

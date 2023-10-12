@@ -2,6 +2,20 @@
 <html dir="ltr" lang="en">
     @include('components.theme.head')
 
+    @if (Auth::user()->role === 'root')
+        @php
+            $menus = Config::get('variable.navigation.root');
+        @endphp
+    @elseif (Auth::user()->role === 'admin')
+        @php
+            $menus = Config::get('variable.navigation.admin');
+        @endphp
+    @else
+        @php
+            $menus = Config::get('variable.navigation.staff');
+        @endphp
+    @endif
+
     <body>
         <!-- ============================================================== -->
         <!-- Preloader - style you can find in spinners.css -->
@@ -16,7 +30,9 @@
         <!-- Main wrapper - style you can find in pages.scss -->
         <!-- ============================================================== -->
         <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full" data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
-            @include('components.theme.header') @include('components.theme.sidebar')
+            @include('components.theme.header')
+            
+            @include('components.theme.sidebar', ['menus' => $menus])
 
             <div class="page-wrapper">
                 @include('components.theme.breadcrumb')

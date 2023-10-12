@@ -62,6 +62,22 @@
             <!-- toggle and nav items -->
             <!-- ============================================================== -->
             <ul class="navbar-nav float-start me-auto">
+              <!-- ============================================================== -->
+              <!-- create new -->
+              <!-- ============================================================== -->
+              <li class="nav-item">
+                <div
+                  class="nav-link dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <span class="d-none d-md-block"><strong>Name : {{ Auth::user()->name }} || Role : {{Auth::user()->role}}</strong></span>
+                </div>
+              </li>
+              <!-- ============================================================== -->
+              <!-- end of create new -->
+              <!-- ============================================================== -->
+
             </ul>
             <!-- ============================================================== -->
             <!-- Right side toggle and nav items -->
@@ -93,9 +109,13 @@
                   />
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="javascript:void(0)">
-                    <i class="fa fa-power-off me-1 ms-1"></i> Logout
-                  </a>
+                  <form id="logout-form" method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <!-- <input class="dropdown-item" type="submit" value="<i class='fa fa-power-off me-1 ms-1'></i> Logout"> -->
+                    <a class="dropdown-item" href="javascript:document.getElementById('logout-form').submit();">
+                      <i class="fa fa-power-off me-1 ms-1"></i> Logout
+                    </a>
+                  </form>
               </ul>
               </li>
               <!-- ============================================================== -->
