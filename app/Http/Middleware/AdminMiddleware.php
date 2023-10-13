@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,8 +14,8 @@ class AdminMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
-        if ($request->user()->role == User::ROLE_ROOT || $request->user()->role == User::ROLE_ADMIN) {
+    {   
+        if (in_array($request->user()->role, ['root', 'admin'])) {
             return $next($request);
         }
         

@@ -25,6 +25,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::middleware('root')->prefix('root')->group(function () {
         Route::get('/dashboard', [RootDashboard::class, 'index']);
         
@@ -38,7 +39,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/users', [UserController::class, 'index']);
     });
-    Route::middleware(['admin', 'root'])->prefix('admin')->group(function () {
+    
+    Route::middleware('admin')->prefix('admin')->group(function () {
         Route::get('/dashboard', [AdminDashboard::class, 'index']);
 
         Route::get('/vehicles', [VehicleController::class, 'index']);
@@ -52,10 +54,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/staffs', [UserController::class, 'index']);
     });
 
-    Route::middleware('staff', 'root')->prefix('staff')->group(function () {
+    Route::middleware('staff')->prefix('staff')->group(function () {
         Route::get('/dashboard', [StaffDashboard::class, 'index']);
     });
-    
 });
 
 

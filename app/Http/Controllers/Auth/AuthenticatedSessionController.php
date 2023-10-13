@@ -32,15 +32,15 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
+        
         $request->session()->regenerate();
+        
+        $role_url = $this->url_redirect[$request->user()->role];
 
-        $role = $this->url_redirect[Auth::user()->role];
-
-        if ($role) {
-            return redirect()->intended($role);
+        if ($role_url) {
+            return redirect()->intended($role_url);
         } else {
-            return $this->destroy($request);
+            // return $this->destroy($request);
         }
 
     }

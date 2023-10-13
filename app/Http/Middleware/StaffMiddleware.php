@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +15,9 @@ class StaffMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->role == User::ROLE_ROOT || $request->user()->role == User::ROLE_STAFF) {
+        // dd($request->user());
+        if (in_array($request->user()->role, ['root', 'staff'])) {
+            // dd($request->user());
             return $next($request);
         }
         

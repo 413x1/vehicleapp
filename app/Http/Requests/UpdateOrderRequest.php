@@ -12,7 +12,6 @@ class UpdateOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {   
-        dd(Auth::user()->role);
         if(in_array(Auth::user()->role, ['root', 'admin'])) {
             return true;
         }
