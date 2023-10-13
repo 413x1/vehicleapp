@@ -56,6 +56,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::middleware('staff')->prefix('staff')->group(function () {
         Route::get('/dashboard', [StaffDashboard::class, 'index']);
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('staff-show-order');
+        Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('staff-update-order');
     });
 });
 

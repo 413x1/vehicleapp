@@ -18,7 +18,7 @@ class OrderDetail extends Model
 
     public function staff(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function order(): BelongsTo

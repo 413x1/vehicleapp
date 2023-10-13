@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Models\Vehicle;
 use App\Models\Driver;
+use App\Models\OrderDetail;
 use App\Models\OrderLog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -108,7 +109,15 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        $this->data['order'] = $order;
+        // $this->data['details'] = OrderDetail::with('staff')->where('order_id', $order->id)->get();
+        $this->data['details'] = $order->details;
+        $this->data['staff_approval'] = $order->details->where('user_id', Auth::user()->id)->first();
+        $this->data['page_name'] = 'Order Approval';
+        return view(
+            'pages.approve-order',
+            $this->data
+        );
     }
 
     /**
@@ -122,9 +131,35 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateOrderRequest $request, Order $order)
+    public function update(UpdateOrderRequest $request, Order $order): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+
+        DB::beginTransaction();
+        try {
+            OrderDetail::where('order_id', $order->id)->where('user_id', Auth::user()->id)->update($validated);
+
+            OrderLog::create([
+                'user_id' => Auth::user()->id,
+                'order_id' => $order->id,
+                'description' => "Order approval data {$validated['is_allow']}",
+            ]);
+            
+            DB::commit();
+
+            $flash['success'] = 'Order create successfully';
+
+        } catch (\Throwable $th) {
+            OrderLog::create([
+                'user_id' => Auth::user()->id,
+                'description' => "Order approval failed error {$th->getMessage()}",
+            ]);
+            DB::rollBack();
+
+            $flash['error'] = "Order approval failed.. {$th->getMessage()}";
+        }
+
+        return Redirect::back()->with($flash);
     }
 
     /**

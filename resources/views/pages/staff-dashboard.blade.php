@@ -34,14 +34,14 @@
       <div class="col mt-3">
             <div class="bg-dark p-10 text-white text-center">
                <i class="mdi mdi-car fs-3 font-16"></i>
-               <h5 class="mb-0 mt-1">{{ $last_approval->vehicle_name }}</h5>
+               <h5 class="mb-0 mt-1">{{ isset($last_approval) ? $last_approval->vehicle_name : '0' }}</h5>
                <small class="font-light">Last Car Approved</small>
             </div>
       </div>
       <div class="col mt-3">
             <div class="bg-dark p-10 text-white text-center">
                <i class="mdi mdi-worker fs-3 font-16"></i>
-               <h5 class="mb-0 mt-1">{{ $last_approval->driver_name }}</h5>
+               <h5 class="mb-0 mt-1">{{ isset($last_approval) ? $last_approval->driver_name : '0' }}</h5>
                <small class="font-light">Last Driver Approved</small>
             </div>
       </div>
@@ -69,7 +69,7 @@
                            @foreach ($orders as $order)
                               <tr>
                                  <th>
-                                       <a href="#">
+                                       <a href="{{ route('staff-show-order', $order->order_id) }}">
                                           {{ $order->vehicle_name }}
                                        </a>
                                  </th>

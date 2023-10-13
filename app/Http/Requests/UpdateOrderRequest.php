@@ -12,7 +12,7 @@ class UpdateOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {   
-        if(in_array(Auth::user()->role, ['root', 'admin'])) {
+        if(in_array(Auth::user()->role, ['root', 'admin', 'staff'])) {
             return true;
         }
         return false;
@@ -26,7 +26,7 @@ class UpdateOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'is_allow' => 'required|boolean|between:0,1',
         ];
     }
 }

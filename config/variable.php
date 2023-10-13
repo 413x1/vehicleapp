@@ -91,14 +91,14 @@ return [
             [
                 "name" => 'Dashboard',
                 "icon" => 'mdi-view-dashboard',
-                "url" => '/root/dashboard/',
-                "breadcrumb" => ['root', 'dashboard'],
+                "url" => '/staff/dashboard/',
+                "breadcrumb" => ['staff', 'dashboard'],
             ],
             [
                 "name" => 'Orders',
                 "icon" => 'mdi-library-books',
                 "url" => '/staff/orders/',
-                "breadcrumb" => ['root', 'orders'],
+                "breadcrumb" => ['staff', 'orders'],
             ],
             [
                 "name" => 'Reports',
