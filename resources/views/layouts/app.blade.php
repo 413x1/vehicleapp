@@ -2,11 +2,11 @@
 <html dir="ltr" lang="en">
     @include('components.theme.head')
 
-    @if (Auth::user()->role === 'root')
+    @if (Request::segment(1) === 'root')
         @php
             $menus = Config::get('variable.navigation.root');
         @endphp
-    @elseif (Auth::user()->role === 'admin')
+    @elseif (Request::segment(1) === 'admin')
         @php
             $menus = Config::get('variable.navigation.admin');
         @endphp
@@ -45,6 +45,34 @@
                     <!-- Start Page Content -->
                     <!-- ============================================================== -->
                     <div class="row">
+                        @if (\Session::has('success'))
+                            <div class="col-12">
+                                <div class="alert alert-success" role="alert">
+                                    {{ \Session::get('success') }}
+                                </div>
+                            </div>
+                        @endif
+
+                        @if (\Session::has('error'))
+                            <div class="col-12">
+                                <div class="alert alert-danger" role="alert">
+                                    {{ \Session::get('error') }}
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="col-12">
+                                <div class="alert alert-danger" role="alert">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endif
+
                         @yield('content')
                     </div>
                     <!-- ============================================================== -->
@@ -66,5 +94,7 @@
         <!-- ============================================================== -->
 
         @include('components.theme.jsfiles')
+
+        @yield('jscode')
     </body>
 </html>

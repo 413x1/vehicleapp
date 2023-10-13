@@ -12,5 +12,15 @@
       sizes="16x16"
       href="{{ asset('/thema/logo-icon.png') }}"
     />
+
+
+    <link
+      href="{{ asset('/thema/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}"
+      rel="stylesheet"
+    />
+
+    @yield('csscode')
+
     <link href="{{ asset('/thema/css/style.min.css') }}" rel="stylesheet" />
+
 </head>

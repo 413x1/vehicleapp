@@ -8,12 +8,18 @@ use App\Models\Driver;
 
 class DriverController extends Controller
 {
+    protected $data = [];
+
+    public function __construct() {
+        $this->data['page_name'] = 'Drivers';
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $this->data['drivers'] = Driver::all();
+        return view('pages.driver', $this->data);
     }
 
     /**

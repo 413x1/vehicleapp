@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use DB;
 use Config;
 use Exception;
 
 use App\Models\User;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Factory;

@@ -8,12 +8,18 @@ use App\Models\Vehicle;
 
 class VehicleController extends Controller
 {
+    protected $data = [];
+
+    public function __construct() {
+        $this->data['page_name'] = 'Vehicles';
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {
-        //
+    {   
+        $this->data['vehicles'] = Vehicle::all();
+        return view('pages.vehicle', $this->data);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateOrderRequest extends FormRequest
 {
@@ -10,7 +11,11 @@ class UpdateOrderRequest extends FormRequest
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
-    {
+    {   
+        dd(Auth::user()->role);
+        if(in_array(Auth::user()->role, ['root', 'admin'])) {
+            return true;
+        }
         return false;
     }
 

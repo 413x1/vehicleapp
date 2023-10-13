@@ -15,3 +15,4 @@
     <script src="{{ asset('/thema/js/sidebarmenu.js') }}"></script>
     <!--Custom JavaScript -->
     <script src="{{ asset('/thema/js/custom.min.js') }}"></script>
+    <script src="{{ asset('/thema/assets/libs/DataTables/datatables.min.js') }}"></script>

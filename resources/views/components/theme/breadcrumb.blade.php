@@ -4,7 +4,7 @@
         <div class="page-breadcrumb">
           <div class="row">
             <div class="col-12 d-flex no-block align-items-center">
-              <h4 class="page-title">Widgets</h4>
+              <h4 class="page-title">{{ isset($page_name) ? $page_name : Request::segment(1)  }}</h4>
               <div class="ms-auto text-end">
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">

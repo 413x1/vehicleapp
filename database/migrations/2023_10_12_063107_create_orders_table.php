@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('driver_id');
             $table->unsignedBigInteger('vehicle_id');
-            $table->enum('status', ['ordered', 'approved', 'returned']);
+            $table->enum('status', ['ordered', 'rejected', 'approved', 'returned']);
+            $table->dateTime('return_at', $precision = 0)->nullable();;
 
             $table->foreign('driver_id')->references('id')->on('drivers');
             $table->foreign('vehicle_id')->references('id')->on('vehicles');

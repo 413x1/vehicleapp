@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('order_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('order_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->text('description');
 
