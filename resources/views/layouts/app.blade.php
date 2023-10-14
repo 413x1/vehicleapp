@@ -35,7 +35,7 @@
             @include('components.theme.sidebar', ['menus' => $menus])
 
             <div class="page-wrapper">
-                @include('components.theme.breadcrumb')
+                @include('components.theme.breadcrumb', ['menus' => $menus, 'path' => parse_url(url()->current())['path']])
 
                 <!-- ============================================================== -->
                 <!-- Container fluid  -->
