@@ -13,14 +13,12 @@
 
 <div class="col-md-6">
     <div class="card">
-    @if(is_null($staff_approval->is_allow))
-        @if (Request::segment(1) == 'root')
-            <form method="post" class="form-horizontal" action="{{ route('root-update-order', $order->id) }}">
-        @elseif (Request::segment(1) == 'admin')
-            <form method="post" class="form-horizontal" action="{{ route('admin-update-order', $order->id) }}">
-        @else
-            <form method="post" class="form-horizontal" action="{{ route('staff-update-order', $order->id) }}">
-        @endif
+    @if (Request::segment(1) == 'root')
+        <form method="post" class="form-horizontal" action="{{ route('root-update-order', $order->id) }}">
+    @elseif (Request::segment(1) == 'admin')
+        <form method="post" class="form-horizontal" action="{{ route('admin-update-order', $order->id) }}">
+    @else
+        <form method="post" class="form-horizontal" action="{{ route('staff-update-order', $order->id) }}">
     @endif
 			@csrf
             @method('PATCH')
@@ -66,16 +64,12 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-md-3" for="disabledTextInput">Other Approval Line</label>
+                    <label class="col-md-3" for="disabledTextInput">Approval Line</label>
                     <div class="col-md-9">
                         @foreach ($details as $detail)
                             <div class="row mb-1">
                                 <div class="col-12">
-                                    @if ($detail->user_id != Auth::user()->id)
-                                        {{ $detail->staff->name }} - 
-                                    @else
-                                        </b>{{ $detail->staff->name }} (you) </b> - 
-                                    @endif
+                                    {{ $detail->staff->name }} - 
                                     @if (is_null($detail->is_allow))
                                         <span class="badge badge-sm bg-secondary">pending</span>
                                     @elseif ($detail->is_allow == 0)
@@ -85,46 +79,42 @@
                                     @endif
                                 </div>
                             </div>
+
                         @endforeach
                     </div>
                 </div>
 
-                @if(is_null($staff_approval->is_allow))
-                    <div class="form-group row">
-                        <label class="col-md-3" for="disabledTextInput">Your Approval</label>
-                        <div class="col-md-9">
-                            <select class="select2 form-select shadow-none" name="is_allow" style="width: 100%; height: 36px">
-                            <option>Select Approval</option>
-                            <option value="1">Approve</option>
-                            <option value="0">Reject</option>
-                        </select>
-                        </div>
+                <div class="form-group row">
+                    <label class="col-md-3" for="disabledTextInput">Update Order Status</label>
+                    <div class="col-md-9">
+                        <select class="select2 form-select shadow-none" require name="status" style="width: 100%; height: 36px">
+                        <option>Select Status</option>
+                        @foreach (['approved' => 'Approved', 'rejected' => 'Rejected', 'returned' => 'Returned'] as $status => $value)
+                            <option value="{{$status}}"
+                                @if ($order->status == $status)
+                                    selected
+                                @endif
+                            >{{$value}}</option>
+                            
+                        @endforeach
+                        <!-- <option value="rejected">Rejected</option>
+                        <option value="returned">Returned</option> -->
+                    </select>
                     </div>
-                @endif
-
+                </div>
 
 			</div>
 			<div class="border-top">
-                @if(is_null($staff_approval->is_allow))
-                    <div class="card-body">
-                        <button type="submit" class="btn btn-primary">
-                            Submit
-                        </button>
-                        <button type="reset" class="btn btn-secondary">
-                            Reset
-                        </button>
-                    </div>
-                @else
                 <div class="card-body">
-                    <div class="alert alert-secondary" role="alert">
-                        Approval is already submitted!!
-                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        Reset
+                    </button>
                 </div>
-                @endif
 			</div>
-            @if(is_null($staff_approval->is_allow))
         </form>
-        @endif
     </div>
 </div>
 

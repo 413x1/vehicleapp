@@ -77,10 +77,21 @@
 
 <div class="col-12">
     <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Order Data</h5>
+        <div class="card-header">
+            <div class="row">
+                <div class="col">
+                    <h5 class="card-title">Order Data</h5>
+                </div>
+                <div class="col-auto align-right">
+                    <button type="button" onclick="ExportToExcel('xlsx')" class="btn btn-info btn-sm">
+                        Export excel
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body px-0">
             <div class="table-responsive">
-                <table id="zero_config" class="table table-striped table-bordered">
+                <table id="tableOrders" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Car</th>
@@ -96,7 +107,11 @@
                         @foreach ($orders as $order)
                             <tr>
                                 <th>
-                                    <a href="#">
+                                    @if (Request::segment(1) == 'root')
+                                        <a href="{{ route('root-show-order', $order->id) }}">
+                                    @else
+                                            <a href="{{ route('admin-show-order', $order->id) }}">
+                                    @endif
                                         {{ $order->vehicle->name }}
                                     </a>
                                 </th>
@@ -120,14 +135,26 @@
 @section('jscode')
     <script src="{{ asset('/thema/assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('/thema/assets/libs/select2/dist/js/select2.min.js') }}"></script>
-
+    <script src="{{ asset('/thema/js/xlsx.full.min.js') }}"></script>
+    
     <script>
-        $("#zero_config").DataTable({
-            order: [[3, 'desc']]
-        });
+        function ExportToExcel(type, fn, dl) {
+            var elt = document.getElementById('tableOrders');
+            var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+            return dl ?
+                XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+                XLSX.writeFile(wb, fn || ('OrderTable.' + (type || 'xlsx')));
+        }
 
         $( document ).ready(function() {
+
+            $("#tableOrders").DataTable({
+                order: [[3, 'desc']],
+            });
+
             $(".select2").select2();
+
+
         });
 
     </script>

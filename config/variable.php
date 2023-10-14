@@ -37,12 +37,6 @@ return [
                 "breadcrumb" => ['root', 'users'],
             ],
             [
-                "name" => 'Reports',
-                "icon" => 'mdi-file-document-box',
-                "url" => '/root/reports/',
-                "breadcrumb" => ['root', 'reports'],
-            ],
-            [
                 "name" => 'Logs',
                 "icon" => 'mdi-code-braces',
                 "url" => '/root/logs/',
@@ -77,14 +71,8 @@ return [
             [
                 "name" => 'Staffs',
                 "icon" => 'mdi-account-multiple',
-                "url" => '/admin/staff/',
-                "breadcrumb" => ['admin', 'staff'],
-            ],
-            [
-                "name" => 'Reports',
-                "icon" => 'mdi-file-document-box',
-                "url" => '/admin/reports/',
-                "breadcrumb" => ['admin', 'reports'],
+                "url" => '/admin/staffs/',
+                "breadcrumb" => ['admin', 'staffs'],
             ],
         ],
         'staff' => [
@@ -93,19 +81,7 @@ return [
                 "icon" => 'mdi-view-dashboard',
                 "url" => '/staff/dashboard/',
                 "breadcrumb" => ['staff', 'dashboard'],
-            ],
-            [
-                "name" => 'Orders',
-                "icon" => 'mdi-library-books',
-                "url" => '/staff/orders/',
-                "breadcrumb" => ['staff', 'orders'],
-            ],
-            [
-                "name" => 'Reports',
-                "icon" => 'mdi-file-document-box',
-                "url" => '/staff/reports/',
-                "breadcrumb" => ['staff', 'reports'],
-            ],
+            ]
         ]
     ]
 ];

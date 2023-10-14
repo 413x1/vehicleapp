@@ -24,9 +24,10 @@ class UpdateOrderRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
+    {   
         return [
-            'is_allow' => 'required|boolean|between:0,1',
+            'status' => 'required_without:is_allow|string|in:approved,rejected,returned',
+            'is_allow' => 'required_without:status|boolean|between:0,1',
         ];
     }
 }

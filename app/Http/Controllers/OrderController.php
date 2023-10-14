@@ -110,14 +110,24 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $this->data['order'] = $order;
-        // $this->data['details'] = OrderDetail::with('staff')->where('order_id', $order->id)->get();
         $this->data['details'] = $order->details;
-        $this->data['staff_approval'] = $order->details->where('user_id', Auth::user()->id)->first();
-        $this->data['page_name'] = 'Order Approval';
-        return view(
-            'pages.approve-order',
-            $this->data
-        );
+
+        if(auth()->user()->role == 'staff') {
+            $this->data['staff_approval'] = $order->details->where('user_id', Auth::user()->id)->first();
+            $this->data['page_name'] = 'Order Approval';
+    
+            return view(
+                'pages.approve-order',
+                $this->data
+            );
+        } else {
+            $this->data['page_name'] = 'Update Approval';
+    
+            return view(
+                'pages.update-order',
+                $this->data
+            );
+        }
     }
 
     /**
@@ -134,32 +144,76 @@ class OrderController extends Controller
     public function update(UpdateOrderRequest $request, Order $order): RedirectResponse
     {
         $validated = $request->validated();
+        
+        if(in_array(auth()->user()->role, ['admin', 'root'])) {
 
-        DB::beginTransaction();
-        try {
-            OrderDetail::where('order_id', $order->id)->where('user_id', Auth::user()->id)->update($validated);
+            if ($validated['status'] == 'approved' && $order->details->where('is_allow')->count() < 2) {
+                OrderLog::create([
+                    'user_id' => Auth::user()->id,
+                    'order_id' => $order->id,
+                    'description' => "Order update data status {$validated['status']} failed",
+                ]);
+                $flash['error'] = 'Order update failed min staff approved 2';
 
-            OrderLog::create([
-                'user_id' => Auth::user()->id,
-                'order_id' => $order->id,
-                'description' => "Order approval data {$validated['is_allow']}",
-            ]);
-            
-            DB::commit();
+                return Redirect::back()->with($flash);
+            }
 
-            $flash['success'] = 'Order create successfully';
+            DB::beginTransaction();
+            try {
+                $order->update($validated);
 
-        } catch (\Throwable $th) {
-            OrderLog::create([
-                'user_id' => Auth::user()->id,
-                'description' => "Order approval failed error {$th->getMessage()}",
-            ]);
-            DB::rollBack();
+                OrderLog::create([
+                    'user_id' => Auth::user()->id,
+                    'order_id' => $order->id,
+                    'description' => "Order update data status {$validated['status']}",
+                ]);
+                
+                DB::commit();
+    
+                $flash['success'] = 'Order update successfully';
+    
+            } catch (\Throwable $th) {
+                OrderLog::create([
+                    'user_id' => Auth::user()->id,
+                    'description' => "Order update failed error {$th->getMessage()}",
+                ]);
+                DB::rollBack();
+    
+                $flash['error'] = "Order update failed.. {$th->getMessage()}";
+            }
+    
+            return Redirect::back()->with($flash);
 
-            $flash['error'] = "Order approval failed.. {$th->getMessage()}";
+        } else {
+
+            DB::beginTransaction();
+            try {
+                OrderDetail::where('order_id', $order->id)->where('user_id', Auth::user()->id)->update($validated);
+    
+                OrderLog::create([
+                    'user_id' => Auth::user()->id,
+                    'order_id' => $order->id,
+                    'description' => "Order approval data {$validated['is_allow']}",
+                ]);
+                
+                DB::commit();
+                
+                $approval = $validated['is_allow'] == 1 ? 'Approved' : 'Rejected';
+                $flash['success'] = "Order {$approval} successfully";
+    
+            } catch (\Throwable $th) {
+                OrderLog::create([
+                    'user_id' => Auth::user()->id,
+                    'description' => "Order approval failed error {$th->getMessage()}",
+                ]);
+                DB::rollBack();
+    
+                $flash['error'] = "Order approval failed.. {$th->getMessage()}";
+            }
+    
+            return Redirect::back()->with($flash);
         }
 
-        return Redirect::back()->with($flash);
     }
 
     /**

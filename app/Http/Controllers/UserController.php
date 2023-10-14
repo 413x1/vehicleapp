@@ -22,6 +22,7 @@ class UserController extends Controller
         if ($login_user->role == 'root') {
             $this->data['users'] = User::all(); 
         } elseif ($login_user->role == 'admin') {
+            $this->data['page_name'] = 'Staff';
             $this->data['users'] = User::where('role', 'staff')->get(); 
         }   else {
             $this->data['users'] = [];

@@ -8,12 +8,18 @@ use App\Models\OrderLog;
 
 class OrderLogController extends Controller
 {
+    protected $data = [];
+
+    public function __construct() {
+        $this->data['page_name'] = 'Order Logs';
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $this->data['order_logs'] = OrderLog::all();
+        return view('pages.order-log', $this->data);
     }
 
     /**

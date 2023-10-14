@@ -5,9 +5,11 @@ use App\Http\Controllers\RootDashboard;
 use App\Http\Controllers\AdminDashboard;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderLogController;
 use App\Http\Controllers\StaffDashboard;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VehicleController;
+use App\Models\OrderLog;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +38,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/orders', [OrderController::class, 'index']);
         Route::get('/orders/create', [OrderController::class, 'create'])->name('root-order-create');
         Route::post('/orders/create', [OrderController::class, 'store'])->name('root-order-store');
-
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('root-show-order');
+        Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('root-update-order');
+        
         Route::get('/users', [UserController::class, 'index']);
+        Route::get('/logs', [OrderLogController::class, 'index']);
     });
     
     Route::middleware('admin')->prefix('admin')->group(function () {
@@ -50,6 +55,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/orders', [OrderController::class, 'index']);
         Route::get('/orders/create', [OrderController::class, 'create'])->name('admin-order-create');
         Route::post('/orders/create', [OrderController::class, 'store'])->name('admin-order-store');
+        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin-show-order');
+        Route::patch('/orders/{order}', [OrderController::class, 'update'])->name('admin-update-order');
         
         Route::get('/staffs', [UserController::class, 'index']);
     });
